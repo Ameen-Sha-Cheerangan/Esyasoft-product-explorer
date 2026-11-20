@@ -50,3 +50,23 @@ src/
   App.tsx                     router setup
   main.tsx                    entry point
 ```
+
+## Approach
+
+1. **Data first.** I defined the product type and an array of 8 products in `data/products.ts`, and derived the category list from that array so the dropdown always matches the data.
+2. **Small, single-purpose components.** `ProductCard` shows one product, `ProductList` maps the products to cards, and `ProductFilters` holds the search box and dropdown. Each one gets its data through props.
+3. **State in one place.** `ProductsPage` owns the search text and the selected category, and passes them down to `ProductFilters`.
+4. **Routing.** A `Layout` route holds the shared header and an `<Outlet />`, with child routes for `/products`, `/products/:id`, a redirect from `/`, and a catch-all not-found page.
+5. **Hooks.** A custom `useDocumentTitle` hook wraps `useEffect` so each page sets its tab title in one line. `useMemo` memoizes the filtered list.
+6. **Verification.** One test file checks each task and fails if anything is logged to the console.
+
+## Key design decision
+
+**Only the user's inputs are stored in state; the filtered list is calculated from them.** `ProductsPage` keeps `searchText` and `selectedCategory` in `useState`, and the visible products are derived with `useMemo`. Storing the filtered list in state too would mean updating it every time either input changed, and the two could get out of sync. Deriving it gives a single source of truth, and makes "search and category work together" one combined condition in a single filter. Because the state lives in the page, `ProductFilters` only displays inputs and is easy to reuse.
+
+## What I'd improve with more time
+
+- **Keep the filters in the URL** with `useSearchParams`. At the moment, filtering, opening a product and pressing Back resets the filters. Storing them in the URL would keep them and make filtered views shareable.
+- **Load products from an API**, with loading and error states, instead of a hard-coded array.
+- **Debounce the search** if the product list grew large.
+- **UI additions:** product images, sorting by price, and pagination.
