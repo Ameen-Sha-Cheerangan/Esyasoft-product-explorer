@@ -9,7 +9,7 @@ A small React app to browse products, search by name, filter by category, and vi
 
 ![Product listing](screenshots/product%20listing.png)
 
-**Product details (`/products/1`)**
+**Product details (`/products/2`)**
 
 ![Product details](screenshots/product%20details%20page.png)
 
